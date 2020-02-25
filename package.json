@@ -5,10 +5,9 @@
   "main": "src/electron.js",
   "author": "Lucas Shanley <lpshanley@gmail.com>",
   "scripts": {
-    "build": "rollup -c && npm run dist",
+    "build": "rollup -c && electron-builder",
     "dev": "rollup -c -w",
-    "start": "cross-env NODE_ENV=development electron src/electron",
-    "dist": "electron-builder"
+    "start": "cross-env NODE_ENV=development electron src/electron"
   },
   "build": {
     "appId": "com.example.app"
