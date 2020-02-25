@@ -1,8 +1,8 @@
-import svelte from 'rollup-plugin-svelte';
-import resolve from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
-//import livereload from 'rollup-plugin-livereload';
-import { terser } from 'rollup-plugin-terser';
+import svelte from 'rollup-plugin-svelte'
+import resolve from '@rollup/plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
+import { terser } from 'rollup-plugin-terser'
+import builtins from 'builtin-modules'
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -10,10 +10,11 @@ export default {
 	input: 'src/main.js',
 	output: {
 		sourcemap: true,
-		format: 'iife',
+		format: 'cjs',
 		name: 'app',
 		file: 'public/build/bundle.js'
 	},
+	external: ['electron', ...builtins],
 	plugins: [
 		svelte({
 			// enable run-time checks when not in production
