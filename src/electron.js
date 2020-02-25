@@ -1,9 +1,14 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
 
-require('electron-reload')(path.join(__dirname, '..', 'public'), {
-  electron: path.join(__dirname, '..', 'node_modules', '.bin', 'electron')
-})
+const { NODE_ENV } = process.env
+const dev = NODE_ENV === 'development'
+
+if (dev) {
+  require('electron-reload')(path.join(__dirname, '..', 'public'), {
+    electron: path.join(__dirname, '..', 'node_modules', '.bin', 'electron')
+  })
+}
 
 function createWindow () {
   // Create the browser window.
@@ -19,8 +24,9 @@ function createWindow () {
   // and load the index.html of the app.
   win.loadFile(path.join(__dirname, '..', 'public', 'index.html'))
 
-  // Open the DevTools.
-  win.webContents.openDevTools()
+  if (dev) {
+    win.webContents.openDevTools()
+  }
 }
 
 // This method will be called when Electron has finished

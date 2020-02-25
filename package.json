@@ -1,16 +1,24 @@
 {
   "name": "svelte-app-electron",
-  "version": "1.0.0",
+  "description": "svelte-app-electron",
+  "version": "0.1.0",
+  "main": "src/electron.js",
+  "author": "Lucas Shanley <lpshanley@gmail.com>",
   "scripts": {
-    "build": "rollup -c",
+    "build": "rollup -c && npm run dist",
     "dev": "rollup -c -w",
-    "start": "sirv public",
-    "electron": "electron src/electron"
+    "start": "cross-env NODE_ENV=development electron src/electron",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.example.app"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.0",
     "@rollup/plugin-node-resolve": "^7.0.0",
     "electron": "^8.0.1",
+    "electron-builder": "^22.3.2",
+    "electron-reload": "^1.5.0",
     "rollup": "^1.20.0",
     "rollup-plugin-livereload": "^1.0.0",
     "rollup-plugin-svelte": "^5.0.3",
@@ -18,7 +26,7 @@
     "svelte": "^3.19.1"
   },
   "dependencies": {
-    "electron-reload": "^1.5.0",
+    "cross-env": "^7.0.0",
     "sirv-cli": "^0.4.4"
   }
 }
