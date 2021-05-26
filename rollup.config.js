@@ -3,6 +3,7 @@ import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import { terser } from 'rollup-plugin-terser'
 import builtins from 'builtin-modules'
+import css from 'rollup-plugin-css-only'
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -12,18 +13,21 @@ export default {
 		sourcemap: true,
 		format: 'cjs',
 		name: 'app',
-		file: 'public/build/bundle.js'
+		file: 'public/build/bundle.js',
+		exports: 'default'
 	},
 	external: ['electron', ...builtins],
 	plugins: [
 		svelte({
-			// enable run-time checks when not in production
-			dev: !production,
-			// we'll extract any component CSS out into
-			// a separate file - better for performance
-			css: css => {
-				css.write('public/build/bundle.css');
+			compilerOptions: {
+				// enable run-time checks when not in production
+				dev: !production
 			}
+		}),
+		// we'll extract any component CSS out into
+		// a separate file - better for performance
+		css({
+			output: 'bundle.css'
 		}),
 
 		// If you have external dependencies installed from
@@ -51,17 +55,22 @@ export default {
 };
 
 function serve() {
-	let started = false;
+	let server;
+
+	function toExit() {
+		if (server) server.kill(0);
+	}
 
 	return {
 		writeBundle() {
-			if (!started) {
-				started = true;
-				
-				require('child_process').spawn('npm', ['run', 'start'], {
+			if (!server) {
+				server = require('child_process').spawn('npm', ['run', 'start', '--', 'dev'], {
 					stdio: ['ignore', 'inherit', 'inherit'],
 					shell: true
 				});
+
+				process.on('SIGTERM', toExit);
+				process.on('exit', toExit);
 			}
 		}
 	};
